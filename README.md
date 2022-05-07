@@ -77,4 +77,44 @@ On bad request
 }
 ```
 
-## GET `/aloha/fetch`
+## GET `/aloha/fetch/(query item)`
+Queries the database for the column (query item) of the user.
+
+Header requirement: **token**
+
+Request
+---
+GET `/aloha/fetch/(query item)`
+
+This will just return a json querying `(query item)` in the database in the user's row.
+
+Examples: `/aloha/fetch/first_name`, `/aloha/fetch/last_name`
+
+Returns
+---
+Successful response
+```json
+{
+    "status": "success",
+    "response": "DataFromDatabase"
+}
+```
+
+On failure (The column does not exist in the database)
+```json
+{
+    "status": "failure",
+    "error": "NoSuchField",
+    "message": "The database does not store such data"
+}
+```
+
+Not authenticated (No token on the header)
+
+Returns a 403 HTTP status code
+```json
+{
+    "status": "failure",
+    "error": "NotAuthenticated",
+    "message": "You haven't logged in"
+}
