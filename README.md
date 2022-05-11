@@ -3,7 +3,7 @@ A simple, basic, RESTful authentication API and user data API.
 
 # API Documentation
 
-## POST `/aloha/login`
+## POST `/aloha/session`
 Takes username and password in json format, checks through a database, and if user exists and hashed password matches, returns a **token** with a limited lifetime. Essentially logging the user in.
 
 Takes JSON as http body
