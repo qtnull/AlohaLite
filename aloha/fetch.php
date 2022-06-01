@@ -77,7 +77,7 @@
         $requested_field = $_GET["field"];
         $token_user = TokenDB::GetTokenData($token);
         $token_username = $token_user['username'];
-        if ( $requested_field == "token:id" || $requested_field == "token:username" || $requested_field == "token:validate" || $requested_field == "token:ttl")
+        if ( $requested_field == "token:id" || $requested_field == "token:username" || $requested_field == "token:validate" || $requested_field == "token:ttl" || $requested_field == "aloha:field")
         {
             switch ($requested_field) {
                 case "token:id":
@@ -91,6 +91,9 @@
                     break;
                 case 'token:ttl':
                     $requested_field_data = TokenDB::GetTTL($token);
+                    break;
+                case 'aloha:field':
+                    $requested_field_data = DB::GetAvailableFields();
                     break;
             }
             $response["status"] = "success";
