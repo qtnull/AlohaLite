@@ -23,9 +23,11 @@ interface SimplifiedDatabaseInterface
     // User management related
     public static function AddUser($username, $password);
     //public static function ResetPassword($username, $newPassword);
-    //public static function DeleteUser($username);
+    public static function DeleteUser($username);
     // Administrator related
     public static function IsAdmin($username);
+    public static function QueryUserData($username);
+    public static function ListUser();
 }
 
 define('DB_SERVER', "localhost");
@@ -199,6 +201,17 @@ class DB implements SimplifiedDatabaseInterface
         $stmt->close();
     }
 
+    public static function DeleteUser($username)
+    {
+        if ( !(self::UsernameExists($username)) ) { throw new UsernameDoesNotExist(); }
+        global $conn;
+        $sql = "DELETE FROM `users` WHERE `username` = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('s', $username);
+        $stmt->execute();
+        $stmt->close();
+    }
+
     public static function IsAdmin($username)
     {
         if ( !(self::UsernameExists($username)) ) { throw new UsernameDoesNotExist(); }
@@ -213,6 +226,36 @@ class DB implements SimplifiedDatabaseInterface
         $stmt->close();
 
         if ($adminStatus === 1) { return true; } else { return false; }
+    }
+
+    public static function QueryUserData($username)
+    {
+        if ( !(self::UsernameExists($username)) ) { throw new UsernameDoesNotExist(); }
+        global $conn;
+        $data = array();
+        $available_fields = self::GetAvailableFields();
+        foreach ($available_fields as $key => $value) {
+            $field_value = self::FetchUserData($username, $key);
+            $data[$key] = $field_value;
+        }
+        return $data;
+    }
+
+    public static function ListUser()
+    {
+        global $conn;
+
+        // Check if PHP has connected to the database, if not, throw DatabaseNotAlive exception
+        if ($conn->connect_error) { throw new DatabaseNotAlive(); }
+
+        $sql = "SELECT `username` FROM `users`";
+        $result = $conn->query($sql);
+        $userlist = array();
+        while ($row = $result->fetch_assoc())
+        {
+            array_push($userlist, $row['username']);
+        }
+        return $userlist;
     }
 }
 ?>

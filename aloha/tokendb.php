@@ -12,6 +12,9 @@ interface SimplifiedTokenManager
     public static function GetTokenData($token);
 }
 
+define('REDIS_IP', "127.0.0.1");
+define("REDIS_PORT", 6379);
+
 class TokenDB implements SimplifiedTokenManager
 {
     private static $token_duration = 600;
@@ -19,7 +22,7 @@ class TokenDB implements SimplifiedTokenManager
     {
         try {
             $redis = new Redis();
-            $redis->connect('127.0.0.1', 6379);
+            $redis->connect(REDIS_IP, REDIS_PORT);
         } catch (Exception $e) {
             throw new TokenServerNotAlive();
         }
@@ -37,7 +40,7 @@ class TokenDB implements SimplifiedTokenManager
     {
         try {
             $redis = new Redis();
-            $redis->connect('127.0.0.1', 6379);
+            $redis->connect(REDIS_IP, REDIS_PORT);
         } catch (Exception $e) {
             throw new TokenServerNotAlive();
         }
@@ -48,7 +51,7 @@ class TokenDB implements SimplifiedTokenManager
     {
         try {
             $redis = new Redis();
-            $redis->connect('127.0.0.1', 6379);
+            $redis->connect(REDIS_IP, REDIS_PORT);
         } catch (Exception $e) {
             throw new TokenServerNotAlive();
         }
@@ -69,7 +72,7 @@ class TokenDB implements SimplifiedTokenManager
         // Will return true if the deletion was successful, returns false when the token is already invalid
         try {
             $redis = new Redis();
-            $redis->connect('127.0.0.1', 6379);
+            $redis->connect(REDIS_IP, REDIS_PORT);
         } catch (Exception $e) {
             throw new TokenServerNotAlive();
         }
@@ -87,7 +90,7 @@ class TokenDB implements SimplifiedTokenManager
     {
         try {
             $redis = new Redis();
-            $redis->connect('127.0.0.1', 6379);
+            $redis->connect(REDIS_IP, REDIS_PORT);
         } catch (Exception $e) {
             throw new TokenServerNotAlive();
         }
